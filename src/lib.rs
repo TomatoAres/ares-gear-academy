@@ -11,6 +11,10 @@ extern "C" fn init() {
     // 接收初始化消息
     let init_message: PebblesInit = msg::load().expect("Can't load init");
 
+    if init_message.pebbles_count == 0 || init_message.max_pebbles_per_turn == 0 {
+        panic!("Invalid pebbles_count or max_pebbles_per_turn");
+    }
+
     // 选择第一个玩家
     let first_player = get_first_player();
 
@@ -125,11 +129,18 @@ extern "C" fn state() {
     msg::reply(game_state, 0).expect("Failed to reply");
 }
 
-// 辅助函数，获取随机数
+// 辅助函数，获取随机数，非测试使用
+#[cfg(not(test))]
 fn get_random_u32() -> u32 {
     let salt = msg::id();
     let (hash, _num) = exec::random(salt.into()).expect("get_random_u32(): random call failed");
     u32::from_le_bytes([hash[0], hash[1], hash[2], hash[3]])
+}
+
+// 测试专用
+#[cfg(test)]
+fn get_random_u32() -> u32 {
+    2
 }
 
 // 根据游戏难度和剩余的Pebbles数量计算程序应拿走的Pebbles数量
