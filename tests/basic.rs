@@ -13,9 +13,9 @@ fn init_game(
     let game = Program::current_opt(sys);
 
     let pebbles_init = PebblesInit {
-        difficulty: difficulty,
-        pebbles_count: pebbles_count,
-        max_pebbles_per_turn: max_pebbles_per_turn,
+        difficulty,
+        pebbles_count,
+        max_pebbles_per_turn,
     };
     let res = game.send(PLAYER, pebbles_init);
     assert!(!res.main_failed());
@@ -85,7 +85,7 @@ fn user_win() {
 
     loop {
         let state: GameState = game.read_state(b"").unwrap();
-        if !state.winner.is_none() {
+        if state.winner.is_some() {
             let _expected_winner = Some(Player::User);
             assert!(matches!(state.winner, _expected_winner));
             break;
