@@ -1,7 +1,7 @@
 #![no_std]
 
-use gmeta::{InOut, Metadata, Out};
-use gstd::{prelude::*, ActorId};
+use gmeta::{In, InOut, Metadata, Out};
+use gstd::prelude::*;
 
 /// The contract metadata. Used by frontend apps & for describing the types of messages that can be
 /// sent in contract's entry points. See also [`Metadata`].
@@ -45,7 +45,7 @@ pub enum PebblesEvent {
     Won(Player),
 }
 
-#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo)]
+#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo, PartialEq)]
 pub enum Player {
     #[default]
     User,
